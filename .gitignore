@@ -1,0 +1,26 @@
+# Ausgeschlossene Beispiel-/Testläufe (nicht Teil der Baseline)
+laeufe/_beispiel/
+laeufe/kurztest*/
+laeufe/schreibtest/
+
+# Temporäre Build-/Editor-Dateien
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Archive und lokale Übertragungsartefakte
+*.zip
+*.tar
+*.tar.gz
+
+# Credentials / Gerätecodes – nie committen
+github-geraetecode.txt
+**/github-geraetecode.txt
+hosts.yml
+**/hosts.yml
