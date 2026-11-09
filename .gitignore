@@ -1,7 +1,6 @@
-# Ausgeschlossene Beispiel-/Testläufe (nicht Teil der Baseline)
-laeufe/_beispiel/
-laeufe/kurztest*/
-laeufe/schreibtest/
+# Runtime-Läufe und erzeugte Website (nicht im Source Control)
+/laeufe/
+/website.html
 
 # Temporäre Build-/Editor-Dateien
 *.tmp
