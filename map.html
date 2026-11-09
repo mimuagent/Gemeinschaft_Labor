@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Labor für neue menschliche Gemeinschaften</title>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 1rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.4rem; }
+    #network { width: 100%; height: 520px; border: 1px solid #ddd; margin-top: 1rem; }
+    #info { margin-top: 1rem; padding: 1rem; background: #f8f8f8; min-height: 90px; }
+    button { margin: 0.5rem 0.5rem 0 0; padding: 0.5rem 1rem; background: #222; color: white; border: none; cursor: pointer; }
+    button:hover { background: #444; }
+    .note { color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Labor für neue menschliche Gemeinschaften</h1>
+  <p class="note">Interaktive Landkarte + Simulation (Phase 3)</p>
+
+  <div>
+    <button onclick="loadMap()">Landkarte laden</button>
+    <button onclick="simulate()">Simulation starten</button>
+  </div>
+
+  <div id="network"></div>
+  <div id="info">Klicke auf einen Knoten oder eine Kante für Details. Grundstimmung: neugierig und experimentell.</div>
+
+  <script>
+    const catalog = {
+      nodes: [
+        {id: "N1", label: "Graffiti-Schichten deuten", title: "Überlagerungen von Tags, Pieces und Übermalungen zeitlich ordnen."},
+        {id: "N2", label: "Verblasste Inschriften entziffern", title: "Alte Laden-, Werbe- und Hausschriften lesbar machen."},
+        {id: "N3", label: "Schriftgestaltung", title: "Schrifttypen, Schildermalerei und Tag-Stile vergleichen."},
+        {id: "N4", label: "Wandfotografie", title: "Wände mit festen Standpunkten und Streiflicht dokumentieren."},
+        {id: "N5", label: "Gemeinsames Wand-Archiv", title: "Funde mit Ort, Datum, Zustand und Deutung als Zeitreihen pflegen."},
+        {id: "N6", label: "Stadtkarten und Geodaten", title: "Fundorte verorten und als Karte darstellen."},
+        {id: "N7", label: "Viertelgeschichte", title: "Frühere Gewerbe und Bewohner über Quellen und Erinnerungen rekonstruieren."},
+        {id: "N8", label: "Graffiti-Kultur", title: "Codes, Crews und Haltungen der Szene verstehen."},
+        {id: "N9", label: "Erkundung von Zwischenräumen", title: "Hinterhöfe, Brachen und Unterführungen begehen."},
+        {id: "N10", label: "Wissen weitergeben", title: "Neulinge begleiten und Fähigkeiten im Tausch teilen."},
+        {id: "N11", label: "Verantwortungsvoller Umgang", title: "Anonymität, Zugang und Veröffentlichung von Fundorten regeln."}
+      ],
+      edges: [
+        {from: "N4", to: "N1", label: "macht Schichtwechsel sichtbar"},
+        {from: "N4", to: "N2", label: "holt Schriften hervor"},
+        {from: "N3", to: "N2", label: "hilft beim Datieren"},
+        {from: "N3", to: "N8", label: "verbindet Lettering"},
+        {from: "N1", to: "N8", label: "setzt Szenewissen voraus"},
+        {from: "N2", to: "N7", label: "verweist auf frühere Gewerbe"},
+        {from: "N4", to: "N5", label: "bildet Zeitreihen"},
+        {from: "N6", to: "N5", label: "ordnet Archiv räumlich"},
+        {from: "N9", to: "N1", label: "führt zu neuen Schichten"},
+        {from: "N8", to: "N11", label: "verlangt Regeln"},
+        {from: "N6", to: "N11", label: "Fundorte können Spots gefährden"},
+        {from: "N9", to: "N11", label: "berührt Zugang und Legalität"},
+        {from: "N10", to: "N4", label: "Fotografieren weitergeben"},
+        {from: "N10", to: "N3", label: "Schriftwissen teilen"},
+        {from: "N7", to: "N10", label: "Viertelgeschichte vermitteln"},
+        {from: "N5", to: "N10", label: "Archiv als Lernmaterial"}
+      ]
+    };
+
+    let network = null;
+
+    function loadMap() {
+      const container = document.getElementById("network");
+      const data = {
+        nodes: new vis.DataSet(catalog.nodes),
+        edges: new vis.DataSet(catalog.edges)
+      };
+      const options = {
+        nodes: { shape: "dot", size: 22, font: { size: 14 } },
+        edges: { arrows: "to", font: { size: 11, align: "middle" }, smooth: { type: "continuous" } },
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -8000 } }
+      };
+      network = new vis.Network(container, data, options);
+
+      network.on("click", function (params) {
+        const info = document.getElementById("info");
+        if (params.nodes.length > 0) {
+          const node = catalog.nodes.find(n => n.id === params.nodes[0]);
+          info.innerHTML = `<strong>${node.label}</strong><br>${node.title}`;
+        } else if (params.edges.length > 0) {
+          info.textContent = "Kante ausgewählt – Bedeutung in der Landkarte.";
+        }
+      });
+    }
+
+    function simulate() {
+      if (!network) loadMap();
+      const info = document.getElementById("info");
+      info.textContent = "Simulation läuft: Fotografie macht Schichten lesbar → Archiv entsteht → Kontext öffnet sich → Wissen wird weitergegeben und Verantwortung regelt das Zeigen.";
+      const sequence = [
+        ["N4"],
+        ["N1", "N2", "N4"],
+        ["N4", "N5", "N6"],
+        ["N7", "N8", "N9"],
+        ["N10", "N11"]
+      ];
+      sequence.forEach((nodes, i) => {
+        setTimeout(() => network.selectNodes(nodes), i * 900);
+      });
+      setTimeout(() => {
+        network.selectNodes([]);
+        info.textContent = "Simulation beendet. Klicke auf Knoten für Details.";
+      }, sequence.length * 900);
+    }
+
+    // Automatisch laden
+    loadMap();
+  </script>
+</body>
+</html>
