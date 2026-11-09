@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Labor für neue menschliche Gemeinschaften</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    h1 { font-size: 1.5rem; }
+    label { display: block; margin-top: 1rem; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #222; color: white; border: none; cursor: pointer; }
+    button:hover { background: #444; }
+    #output { margin-top: 2rem; padding: 1rem; background: #f8f8f8; border: 1px solid #ddd; }
+    .section { margin-top: 1.5rem; }
+    .note { color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Labor für neue menschliche Gemeinschaften</h1>
+  <p class="note">Minimales Interface – Eingabe → Konzeptanzeige</p>
+
+  <label for="interest">Interessen-Set</label>
+  <textarea id="interest" rows="3">Urbane Spurensuche – Gemeinsames Dokumentieren von Graffiti-Schichten und verblassten Wandinschriften in der Stadt.</textarea>
+
+  <label for="knot">Knotentyp</label>
+  <select id="knot">
+    <option value="Interessen" selected>Interessen</option>
+    <option value="Archetypen">Archetypen</option>
+    <option value="Personas">Fiktive Personas</option>
+  </select>
+
+  <button onclick="generate()">Konzept anzeigen</button>
+
+  <div id="output" style="display:none;"></div>
+
+  <script>
+    // Echte Daten aus dem aktuellen Agenten-Lauf (Knotentyp Interessen)
+    const concept = {
+      analysis: "Mit dem Knotentyp Interessen wird die urbane Spurensuche als Zusammenspiel klar unterscheidbarer Interessen gelesen, die sich an denselben Wänden treffen. Das Interesse am Entdecken richtet sich auf versteckte Orte. Das Interesse am Festhalten umfasst Fotografie und Sammlungen. Das Interesse am Verstehen fragt nach Herkunft und Bedeutung. Das Interesse an Gestaltung gilt Schriftformen und der Ästhetik der Überlagerung. Das Interesse am Miteinander macht das Dokumentieren zu einer geteilten Praxis.",
+      formats: [
+        "Der Interessen-Tausch-Gang",
+        "Die Wand-Werkstatt",
+        "Die Interessen-Patenschaft für Neulinge"
+      ],
+      nodes: [
+        "N1 Graffiti-Schichten deuten",
+        "N2 Verblasste Inschriften entziffern",
+        "N3 Schriftgestaltung",
+        "N4 Wandfotografie",
+        "N5 Gemeinsames Wand-Archiv",
+        "N6 Stadtkarten und Geodaten",
+        "N7 Viertelgeschichte",
+        "N8 Graffiti-Kultur",
+        "N9 Erkundung von Zwischenräumen",
+        "N10 Wissen weitergeben",
+        "N11 Verantwortungsvoller Umgang"
+      ],
+      clusters: ["K1 Lesen und Entziffern", "K2 Dokumentieren und Archivieren", "K3 Kontext und Kultur", "K4 Gemeinschaft und Verantwortung"]
+    };
+
+    function generate() {
+      const interest = document.getElementById('interest').value.trim();
+      const knot = document.getElementById('knot').value;
+      const out = document.getElementById('output');
+      out.style.display = 'block';
+
+      out.innerHTML = `
+        <div class="section"><strong>Interessen-Set:</strong> ${interest}</div>
+        <div class="section"><strong>Knotentyp:</strong> ${knot}</div>
+        <div class="section"><strong>Analyse:</strong><br>${concept.analysis}</div>
+        <div class="section"><strong>Formate:</strong><ul>${concept.formats.map(f => `<li>${f}</li>`).join('')}</ul></div>
+        <div class="section"><strong>Landkarten-Knoten:</strong><ul>${concept.nodes.map(n => `<li>${n}</li>`).join('')}</ul></div>
+        <div class="section"><strong>Cluster:</strong> ${concept.clusters.join(', ')}</div>
+        <div class="section note">Grundstimmung: neugierig und experimentell. Die vollständige Landkarte und Simulation folgen in der nächsten Phase.</div>
+      `;
+    }
+  </script>
+</body>
+</html>
