@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Labor für neue menschliche Gemeinschaften</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.2rem; margin-top: 2rem; }
+    label { display: block; margin-top: 1rem; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #222; color: white; border: none; cursor: pointer; }
+    button:hover { background: #444; }
+    .preset { display: inline-block; margin-right: 0.5rem; padding: 0.4rem 0.8rem; background: #eee; cursor: pointer; border-radius: 4px; }
+    .preset.active { background: #222; color: white; }
+    #output { margin-top: 2rem; padding: 1rem; background: #f8f8f8; border: 1px solid #ddd; }
+    .note { color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Labor für neue menschliche Gemeinschaften</h1>
+  <p class="note">Konfigurationsoberfläche (Phase 2)</p>
+
+  <h2>Presets</h2>
+  <div>
+    <span class="preset active" onclick="setPreset('schnell', this)">Schnell</span>
+    <span class="preset" onclick="setPreset('mittel', this)">Mittel</span>
+    <span class="preset" onclick="setPreset('komplex', this)">Komplex</span>
+  </div>
+
+  <h2>Parameter</h2>
+  <label>Modell (alle Agenten)</label>
+  <select id="model">
+    <option value="grok-3">grok-3</option>
+    <option value="grok-4">grok-4</option>
+  </select>
+
+  <label>Aufwand pro Agent</label>
+  <select id="effort">
+    <option value="niedrig" selected>Niedrig</option>
+    <option value="mittel">Mittel</option>
+    <option value="hoch">Hoch</option>
+  </select>
+
+  <label>Knotentyp</label>
+  <select id="knot">
+    <option value="Interessen" selected>Interessen</option>
+    <option value="Archetypen">Archetypen</option>
+    <option value="Personas">Fiktive Personas</option>
+  </select>
+
+  <h2>Interessen-Set</h2>
+  <textarea id="interest" rows="3">Urbane Spurensuche – Gemeinsames Dokumentieren von Graffiti-Schichten und verblassten Wandinschriften in der Stadt.</textarea>
+
+  <button onclick="estimate()">Kostenschätzung anzeigen</button>
+  <button onclick="run()">Konzept erzeugen</button>
+
+  <div id="output" style="display:none;"></div>
+
+  <script>
+    const presets = {
+      schnell: { model: "grok-3", effort: "niedrig" },
+      mittel: { model: "grok-3", effort: "mittel" },
+      komplex: { model: "grok-4", effort: "hoch" }
+    };
+
+    function setPreset(name, el) {
+      document.querySelectorAll('.preset').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('model').value = presets[name].model;
+      document.getElementById('effort').value = presets[name].effort;
+    }
+
+    function estimate() {
+      const model = document.getElementById('model').value;
+      const effort = document.getElementById('effort').value;
+      const out = document.getElementById('output');
+      out.style.display = 'block';
+      const cost = effort === 'hoch' ? 'ca. 0,40–0,80 €' : effort === 'mittel' ? 'ca. 0,15–0,30 €' : 'ca. 0,05–0,10 €';
+      out.innerHTML = `<strong>Kostenschätzung</strong><br>Modell: ${model}<br>Aufwand: ${effort}<br>Geschätzte Kosten pro Lauf: ${cost}<br><span class="note">(Orientierungswert, abhängig von tatsächlicher Token-Nutzung)</span>`;
+    }
+
+    function run() {
+      const interest = document.getElementById('interest').value.trim();
+      const knot = document.getElementById('knot').value;
+      const out = document.getElementById('output');
+      out.style.display = 'block';
+      out.innerHTML = `<strong>Konzept wird erzeugt…</strong><br>Interessen-Set: ${interest}<br>Knotentyp: ${knot}<br><span class="note">In der vollständigen Anwendung werden hier die Agenten aufgerufen und das Ergebnis angezeigt.</span>`;
+    }
+  </script>
+</body>
+</html>
