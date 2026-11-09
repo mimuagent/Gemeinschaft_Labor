@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Labor für neue menschliche Gemeinschaften</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 0 auto; }
+    nav { background: #222; padding: 0.8rem 1rem; }
+    nav a { color: white; margin-right: 1.2rem; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 1rem; }
+    iframe { width: 100%; height: 80vh; border: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#" onclick="load('config.html')">Konfiguration</a>
+    <a href="#" onclick="load('index.html')">Konzept</a>
+    <a href="#" onclick="load('map.html')">Landkarte & Simulation</a>
+  </nav>
+  <main>
+    <iframe id="frame" src="config.html"></iframe>
+  </main>
+  <script>
+    function load(page) {
+      document.getElementById('frame').src = page;
+    }
+  </script>
+</body>
+</html>
